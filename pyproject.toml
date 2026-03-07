@@ -1,7 +1,38 @@
+[build-system]
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
+
 [project]
 name = "flight-performance-analytics-pipeline"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = []
+
+[tool.uv.build-backend]
+module-name = "flight_performance_analytics_pipeline"
+
+[tool.setuptools_scm]
+write_to = "_version.py"
+version_scheme = "release-branch-semver"
+
+[tool.ruff]
+line-length = 100
+lint.select = ["E", "F", "W", "I", "C", "B"]
+lint.ignore = ["E501"]
+
+[tool.ruff.isort]
+known-first-party = ["src"]
+
+[tool.bandit]
+exclude_dirs = ["src/tests", "docs", "build", "dist", "venv", ".venv"]
+skips = ["B101"]
+
+[tool.mypy]
+strict = true
+ignore_missing_imports = true
+disable_error_code = "misc"
+
+[dependency-groups]
+dev = ["pre-commit>=4.5.1"]
