@@ -25,6 +25,8 @@ jobs:
               run: uv sync --frozen
 
             - name: Run pre-commit (ruff, trailing whitespace, etc.)
+              env:
+                  SKIP: no-commit-to-branch
               run: uv run pre-commit run --all-files
 
     unit-tests:
