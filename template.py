@@ -1,4 +1,3 @@
-import json
 import logging
 import os
 from pathlib import Path
@@ -156,7 +155,7 @@ def create_project_structure() -> None:
             os.makedirs(filedir, exist_ok=True)
             logging.info(f"Created directory: {filedir} for filename: {filename}")
         if (not os.path.exists(filename)) or (os.path.getsize(filename) == 0):
-            with open(filepath, "w", encoding="utf-8") as f:
+            with open(filepath, "w", encoding="utf-8"):
                 logging.info(f"Created file: {filename}")
         else:
             logging.info(f"File {filename} already exists.")
