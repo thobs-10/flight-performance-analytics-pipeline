@@ -45,6 +45,7 @@ repos:
       # Prevent committing directly to trunk (since Bitbucket wants us to pay for this feature)
       - id: no-commit-to-branch
         args: ["--branch=main"]
+        stages: [pre-commit]
       # Detects the presence of private keys
       - id: detect-private-key
       # detects errors in toml files
