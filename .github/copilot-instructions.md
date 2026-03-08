@@ -18,7 +18,7 @@ This project is a data engineering pipeline for flight performance analytics. It
 - Simplify queries, DDL and DML statements, and avoid unnecessary complexity in the codebase.
 - Follow design patterns and principles, such as SOLID, DRY, and KISS, to ensure maintainability and scalability of the codebase.
 - Ensure that the code is well-documented and easy to understand for other developers who may work on the project in the future.
-- Always wait for user input before generating code, and ask clarifying questions if the requirements are not clear.
+- When the user's request is ambiguous or under-specified, ask clarifying questions before generating code; when the request is clear, you may generate an initial implementation directly.
 - Always assess the impact of code changes on the overall project and ensure that they align with the project goals and objectives.
 - Assess trade-offs between different approaches and choose the one that best fits the project requirements and constraints.
 - Plan and design the code structure before writing code, and ensure that it is modular and scalable.
