@@ -208,3 +208,9 @@ __marimo__/
 
 data/
 COPILOT_INSTRUCTIONS.md
+*.txt
+*.json
+*.csv
+*.parquet
+*.log
+*.DS_Store
