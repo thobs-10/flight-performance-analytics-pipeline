@@ -23,7 +23,7 @@ This project is a data engineering pipeline for flight performance analytics. It
 - Assess trade-offs between different approaches and choose the one that best fits the project requirements and constraints.
 - Plan and design the code structure before writing code, and ensure that it is modular and scalable.
 
-# Code Review guidelines
+## Code Review guidelines
 - Look for adherence to coding guidelines and best practices.
 - Check cohesion and SRP (Single Responsibility Principle) of functions and classes.
 - Check for encapsulation and abstraction.
