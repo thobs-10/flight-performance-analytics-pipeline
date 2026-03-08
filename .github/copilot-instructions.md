@@ -1,6 +1,6 @@
 # Instructions for GitHub Copilot agent
 ## Project description
-This project is a data engineering pipeline for flight performance analytics. It involves extracting, transforming, and loading (ETL) flight data from various sources, performing data quality checks, and generating reports and visualizations for stakeholders. The pipeline is built using Python and utilizes libraries such as polars, great_expectations, postgres, clickhouse database, dagster for orchestration, and dbt for data transformation.
+This project is a data engineering pipeline for flight performance analytics. It involves extracting, transforming, and loading (ETL) flight data from various sources, performing data quality checks, and generating reports and visualizations for stakeholders. The pipeline is built using Python and standard data engineering tooling for orchestration, data quality, and data transformation.
 
 ## Coding guidelines
 - Follow PEP 8 style guide for Python code.
