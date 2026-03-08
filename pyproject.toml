@@ -34,5 +34,16 @@ strict = true
 ignore_missing_imports = true
 disable_error_code = "misc"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "unit: fast, no external services",
+    "integration: requires postgres and clickhouse",
+]
+
 [dependency-groups]
-dev = ["pre-commit>=4.5.1"]
+dev = [
+    "pre-commit>=4.5.1",
+    "pytest>=8.0.0",
+    "pytest-xdist>=3.0.0",
+]
