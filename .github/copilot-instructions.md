@@ -13,7 +13,7 @@ This project is a data engineering pipeline for flight performance analytics. It
 - Handle exceptions gracefully and provide meaningful error messages.
 - Use version control (git) for all code changes and commit messages should be clear and concise.
 - Avoid hardcoding values; use configuration files or environment variables instead.
-- Ensure that the code is compatible with Python 3.12 or higher.
+- Ensure that the code is compatible with Python 3.13 or higher.
 - Follow best practices for data engineering, such as using efficient data structures and algorithms, optimizing database queries, and minimizing memory usage.
 - Simplify queries, DDL and DML statements, and avoid unnecessary complexity in the codebase.
 - Follow design patterns and principles, such as SOLID, DRY, and KISS, to ensure maintainability and scalability of the codebase.
