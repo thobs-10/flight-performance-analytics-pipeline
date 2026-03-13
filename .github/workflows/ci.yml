@@ -91,7 +91,7 @@ jobs:
           enable-cache: true
 
       - name: Export requirements for scanning
-        run: uv export > requirements.txt
+        run: uv export --no-emit-project > requirements.txt
 
       - name: Run pip-audit
         run: uvx pip-audit -r requirements.txt --vulnerability-service osv
