@@ -70,8 +70,30 @@ fail_under = 80
 show_missing = true
 
 [dependency-groups]
-dev = [
-    "pre-commit>=4.5.1",
-    "pytest>=8.0.0",
-    "pytest-xdist>=3.0.0",
+dev = ["pre-commit>=4.5.1", "pytest>=8.0.0", "pytest-xdist>=3.0.0"]
+
+[tool.dg]
+
+# ("project", required) Marks this as a Dagster project.
+directory_type = "project"
+
+[tool.dg.project]
+
+# (string, required) Specifies the root module of the project.
+root_module = "flight_performance_analytics_pipeline" # this is required
+
+# Defaults to `<root_module>.defs`.
+defs_module = "flight_performance_analytics_pipeline.defs"
+
+
+# Defaults to `<root_module>.definitions`.
+code_location_target_module = "flight_performance_analytics_pipeline.definitions"
+
+
+code_location_name = "flight_performance_analytics_pipeline"
+
+registry_modules = [
+    "flight_performance_analytics_pipeline.alternate_components.*",
 ]
+
+[tool.dg.cli]
