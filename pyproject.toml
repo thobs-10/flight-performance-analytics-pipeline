@@ -9,7 +9,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "fastexcel>=0.19.0",
+    "ipykernel>=7.2.0",
     "loguru>=0.7.3",
+    "pandas>=3.0.1",
+    "polars>=1.39.0",
+    "pyarrow>=23.0.1",
     "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
     "pytest-instafail>=0.5.0",
