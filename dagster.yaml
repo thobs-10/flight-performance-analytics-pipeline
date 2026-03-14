@@ -1,0 +1,3 @@
+load_from:
+  - python_package:
+      package_name: flight_performance_analytics_pipeline
