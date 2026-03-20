@@ -1,3 +1,4 @@
-load_from:
-  - python_package:
-      package_name: flight_performance_analytics_pipeline
+# Dagster instance configuration
+# See: https://docs.dagster.io/dagster-plus/deployment/dagster-plus-yaml
+# load_from belongs in workspace.yaml, not here.
+# dg dev auto-discovers defs/ — no workspace.yaml needed.

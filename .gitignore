@@ -216,3 +216,4 @@ COPILOT_INSTRUCTIONS.md
 *.DS_Store
 *.tmp_dagster
 *.tmp_dagster_*
+.dagster_home/
