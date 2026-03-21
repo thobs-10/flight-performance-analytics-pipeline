@@ -214,3 +214,6 @@ COPILOT_INSTRUCTIONS.md
 *.parquet
 *.log
 *.DS_Store
+*.tmp_dagster
+*.tmp_dagster_*
+.dagster_home/
