@@ -28,10 +28,7 @@ def load_sql(relative_path: str) -> str:
 
     # Prevent directory traversal by ensuring the resolved path is within sql_scripts.
     if not sql_file.is_relative_to(base_sql_dir):
-        _logger.error(
-            "Attempted to load SQL script outside of sql_scripts directory: %s",
-            sql_file,
-        )
+        _logger.error(f"Attempted to load SQL script outside of sql_scripts directory: {sql_file}")
         raise FileNotFoundError("SQL script not found or invalid path specified.")
     if not sql_file.exists():
         _logger.error(f"SQL script not found: {sql_file}")

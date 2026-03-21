@@ -6,7 +6,6 @@ from unittest.mock import MagicMock, patch
 import polars as pl
 import pytest
 from dagster import build_asset_context
-
 from flight_performance_analytics_pipeline.assets.bronze.load_to_postgres import (
     BronzeIngestionConfig,
     add_metadata_columns_to_airline_delay_data,
