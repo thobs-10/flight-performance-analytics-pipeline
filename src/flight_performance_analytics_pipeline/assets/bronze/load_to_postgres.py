@@ -13,7 +13,7 @@ from flight_performance_analytics_pipeline.utils.load_postgres_utils import (
 class BronzeIngestionConfig(Config):
     """Runtime config for the bronze ingestion pipeline."""
 
-    csv_path: str = "data/ot_delaycause1_DL/Airline_Delay_Cause.csv"
+    csv_path: str
 
 
 @asset

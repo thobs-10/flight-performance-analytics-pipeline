@@ -1,5 +1,5 @@
 from dagster import ConfigurableResource
-from sqlalchemy import create_engine
+from sqlalchemy import URL, create_engine
 from sqlalchemy.engine import Engine
 
 
@@ -20,9 +20,13 @@ class PostgresResource(ConfigurableResource):
 
     def get_engine(self) -> Engine:
         """Return a SQLAlchemy engine connected to the configured PostgreSQL instance."""
-        url = (
-            f"postgresql+psycopg://{self.user}:{self.password}"
-            f"@{self.host}:{self.port}/{self.database}"
+        url = URL.create(
+            drivername="postgresql+psycopg",
+            username=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port,
+            database=self.database,
         )
         return create_engine(
             url,

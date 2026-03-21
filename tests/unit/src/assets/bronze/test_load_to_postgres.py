@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, patch
 import polars as pl
 import pytest
 from dagster import build_asset_context
+
 from flight_performance_analytics_pipeline.assets.bronze.load_to_postgres import (
     BronzeIngestionConfig,
     add_metadata_columns_to_airline_delay_data,
@@ -51,6 +52,24 @@ def sample_df() -> pl.DataFrame:
             "late_aircraft_delay": [643.0, 450.0],
         }
     )
+
+
+_AIRLINE_DELAY_CSV_CONTENT = (
+    "year,month,carrier,carrier_name,airport,airport_name,"
+    "arr_flights,arr_del15,carrier_ct,weather_ct,nas_ct,security_ct,"
+    "late_aircraft_ct,arr_cancelled,arr_diverted,arr_delay,carrier_delay,"
+    "weather_delay,nas_delay,security_delay,late_aircraft_delay\n"
+    "2025,11,AA,American Airlines,JFK,John F. Kennedy International,"
+    "120.0,20.0,5.0,0.5,2.0,0.0,8.0,3.0,1.0,800.0,200.0,50.0,100.0,0.0,450.0\n"
+)
+
+
+@pytest.fixture
+def airline_delay_csv(tmp_path: Path) -> Path:
+    """Write a minimal airline delay CSV to a temp directory and return its path."""
+    csv_file = tmp_path / "Airline_Delay_Cause.csv"
+    csv_file.write_text(_AIRLINE_DELAY_CSV_CONTENT, encoding="utf-8")
+    return csv_file
 
 
 # ---------------------------------------------------------------------------
@@ -200,17 +219,17 @@ def test_write_to_database_logs_row_count(sample_df: pl.DataFrame) -> None:
 
 
 @pytest.mark.unit
-def test_read_raw_airline_delay_csv_returns_dataframe() -> None:
+def test_read_raw_airline_delay_csv_returns_dataframe(airline_delay_csv: Path) -> None:
     """read_raw_airline_delay_csv should return a non-empty Polars DataFrame."""
     context = build_asset_context()
-    config = BronzeIngestionConfig()
+    config = BronzeIngestionConfig(csv_path=str(airline_delay_csv))
     result = read_raw_airline_delay_csv(context=context, config=config)
     assert isinstance(result, pl.DataFrame)
     assert len(result) > 0
 
 
 @pytest.mark.unit
-def test_read_raw_airline_delay_csv_has_expected_columns() -> None:
+def test_read_raw_airline_delay_csv_has_expected_columns(airline_delay_csv: Path) -> None:
     """The raw CSV asset should contain all 21 source columns."""
     expected_columns = {
         "year",
@@ -236,7 +255,7 @@ def test_read_raw_airline_delay_csv_has_expected_columns() -> None:
         "late_aircraft_delay",
     }
     context = build_asset_context()
-    config = BronzeIngestionConfig()
+    config = BronzeIngestionConfig(csv_path=str(airline_delay_csv))
     result = read_raw_airline_delay_csv(context=context, config=config)
     assert expected_columns.issubset(set(result.columns))
 
