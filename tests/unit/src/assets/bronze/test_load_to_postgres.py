@@ -75,12 +75,16 @@ def test_get_csv_file_path_relative_resolves_to_absolute() -> None:
 
 
 @pytest.mark.unit
-def test_get_csv_file_path_relative_points_to_existing_file() -> None:
-    """The resolved path for the known CSV should exist on disk."""
-    result = get_csv_file_path("data/ot_delaycause1_DL/Airline_Delay_Cause.csv")
-    assert Path(result).exists(), f"Expected file to exist at: {result}"
+def test_get_csv_file_path_relative_points_to_existing_file(tmp_path: Path) -> None:
+    """The resolved path should point to a CSV file that exists on disk using a temp fixture."""
+    # Create a small temporary CSV file to avoid relying on repo-local data directories.
+    csv_path = tmp_path / "Airline_Delay_Cause.csv"
+    csv_path.write_text("year,month,carrier\n2025,11,AA\n", encoding="utf-8")
 
-
+    # When given an absolute path to an existing file, get_csv_file_path should return it unchanged.
+    result = get_csv_file_path(str(csv_path))
+    assert result == str(csv_path)
+    assert Path(result).exists(), f"Expected temporary CSV to exist at: {result}"
 # ---------------------------------------------------------------------------
 # add_ingested_column
 # ---------------------------------------------------------------------------
