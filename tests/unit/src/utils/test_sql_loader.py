@@ -4,9 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-
 from flight_performance_analytics_pipeline.utils.sql_loader import load_sql
-
 
 # ---------------------------------------------------------------------------
 # load_sql — happy path

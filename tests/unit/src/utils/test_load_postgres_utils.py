@@ -1,19 +1,17 @@
 """Unit tests for load_postgres_utils functions — edge cases and isolation tests."""
 
 from datetime import datetime, timezone
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, patch
 
 import polars as pl
 import pytest
-from sqlalchemy.exc import OperationalError, SQLAlchemyError
-
 from flight_performance_analytics_pipeline.utils.load_postgres_utils import (
     add_ingested_column,
     get_csv_file_path,
     load_query,
     write_to_database,
 )
-
+from sqlalchemy.exc import OperationalError, SQLAlchemyError
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -106,7 +104,7 @@ def test_add_ingested_column_all_rows_have_same_timestamp(sample_df: pl.DataFram
     """All rows should receive the same ingestion timestamp within a single call."""
     result = add_ingested_column(sample_df)
     timestamps = result["_ingested_at"].to_list()
-    assert len(set(str(t) for t in timestamps)) == 1
+    assert len({str(t) for t in timestamps}) == 1
 
 
 @pytest.mark.unit
