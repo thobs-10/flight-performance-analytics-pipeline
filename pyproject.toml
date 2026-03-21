@@ -100,3 +100,11 @@ registry_modules = [
 ]
 
 [tool.dg.cli]
+
+[tool.sqlfluff.core]
+dialect = "postgres"
+templater = "jinja"
+# ST06: column ordering conflicts with dbt conventions where the surrogate key
+# (md5 calculation) appears first before business columns.
+# CV11: Project uses :: shorthand throughout; excluding avoids fix-then-break cycles.
+exclude_rules = ["structure.column_order", "convention.casting_style"]

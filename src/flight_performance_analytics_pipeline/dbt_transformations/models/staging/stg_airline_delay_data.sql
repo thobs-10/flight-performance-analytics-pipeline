@@ -17,44 +17,44 @@ deduped as (
 cleaned as (
     select
         -- Surrogate key
-        md5(
-            cast(year as text)
-            || '-' || cast(month as text)
-            || '-' || upper(trim(carrier))
-            || '-' || upper(trim(airport))
-        )                                       as airline_delay_id,
+        year::integer as year,  -- noqa: RF04
 
         -- Identifiers
-        cast(year as integer)                   as year,
-        cast(month as integer)                  as month,
-        upper(trim(carrier))                    as carrier,
-        trim(carrier_name)                      as carrier_name,
-        upper(trim(airport))                    as airport,
-        trim(airport_name)                      as airport_name,
+        month::integer as month,  -- noqa: RF04
+        carrier_ct::numeric(10, 2) as carrier_ct,  -- noqa: RF04
+        weather_ct::numeric(10, 2) as weather_ct,
+        nas_ct::numeric(10, 2) as nas_ct,
+        security_ct::numeric(10, 2) as security_ct,
+        late_aircraft_ct::numeric(10, 2) as late_aircraft_ct,
 
         -- Flight counts (whole numbers in source, stored as integer)
-        round(cast(arr_flights as numeric))::integer    as arr_flights,
-        round(cast(arr_del15 as numeric))::integer      as arr_del15,
-        round(cast(arr_cancelled as numeric))::integer  as arr_cancelled,
-        round(cast(arr_diverted as numeric))::integer   as arr_diverted,
+        arr_delay::numeric(10, 2) as arr_delay,
+        carrier_delay::numeric(10, 2) as carrier_delay,
+        weather_delay::numeric(10, 2) as weather_delay,
+        nas_delay::numeric(10, 2) as nas_delay,
 
         -- Weighted delay cause counts (fractional — keep as numeric)
-        cast(carrier_ct as numeric(10, 2))      as carrier_ct,
-        cast(weather_ct as numeric(10, 2))      as weather_ct,
-        cast(nas_ct as numeric(10, 2))          as nas_ct,
-        cast(security_ct as numeric(10, 2))     as security_ct,
-        cast(late_aircraft_ct as numeric(10, 2)) as late_aircraft_ct,
+        security_delay::numeric(10, 2) as security_delay,
+        late_aircraft_delay::numeric(10, 2) as late_aircraft_delay,
+        _ingested_at,
+        md5(
+            year::text
+            || '-' || month::text
+            || '-' || upper(trim(carrier))
+            || '-' || upper(trim(airport))
+        ) as airline_delay_id,
+        upper(trim(carrier)) as carrier,
 
         -- Delay minutes
-        cast(arr_delay as numeric(10, 2))           as arr_delay,
-        cast(carrier_delay as numeric(10, 2))       as carrier_delay,
-        cast(weather_delay as numeric(10, 2))       as weather_delay,
-        cast(nas_delay as numeric(10, 2))           as nas_delay,
-        cast(security_delay as numeric(10, 2))      as security_delay,
-        cast(late_aircraft_delay as numeric(10, 2)) as late_aircraft_delay,
+        trim(carrier_name) as carrier_name,
+        upper(trim(airport)) as airport,
+        trim(airport_name) as airport_name,
+        round(arr_flights::numeric)::integer as arr_flights,
+        round(arr_del15::numeric)::integer as arr_del15,
+        round(arr_cancelled::numeric)::integer as arr_cancelled,
 
         -- Audit
-        _ingested_at
+        round(arr_diverted::numeric)::integer as arr_diverted
 
     from deduped
     where _row_num = 1

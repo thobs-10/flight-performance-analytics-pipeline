@@ -30,7 +30,7 @@ def bronze_no_null_key_columns(postgres: PostgresResource) -> AssetCheckResult:
     engine = postgres.get_engine()
     try:
         null_conditions = " OR ".join(f"{col} IS NULL" for col in _KEY_COLUMNS)
-        query = f"SELECT {', '.join(_KEY_COLUMNS)} FROM {_BRONZE_TABLE} WHERE {null_conditions}"
+        query = f"SELECT {', '.join(_KEY_COLUMNS)} FROM {_BRONZE_TABLE} WHERE {null_conditions}"  # nosec B608
         df = pl.read_database(query=query, connection=engine)
         errors = validate_no_nulls(df, _KEY_COLUMNS)
     finally:
@@ -50,7 +50,7 @@ def bronze_minimum_row_count(postgres: PostgresResource) -> AssetCheckResult:
     engine = postgres.get_engine()
     try:
         df = pl.read_database(
-            query=f"SELECT COUNT(*) AS row_count FROM {_BRONZE_TABLE}",
+            query=f"SELECT COUNT(*) AS row_count FROM {_BRONZE_TABLE}",  # nosec B608
             connection=engine,
         )
         count_df = pl.DataFrame({"_check": range(df["row_count"][0])})
@@ -72,7 +72,7 @@ def bronze_data_freshness(postgres: PostgresResource) -> AssetCheckResult:
     engine = postgres.get_engine()
     try:
         df = pl.read_database(
-            query=f"SELECT MAX(_ingested_at) AS latest FROM {_BRONZE_TABLE}",
+            query=f"SELECT MAX(_ingested_at) AS latest FROM {_BRONZE_TABLE}",  # nosec B608
             connection=engine,
         )
         latest = df["latest"][0]

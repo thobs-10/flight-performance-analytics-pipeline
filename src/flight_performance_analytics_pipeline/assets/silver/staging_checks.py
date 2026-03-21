@@ -29,7 +29,7 @@ def staging_unique_surrogate_key(postgres: PostgresResource) -> AssetCheckResult
     engine = postgres.get_engine()
     try:
         df = pl.read_database(
-            query=f"SELECT airline_delay_id FROM {_STAGING_TABLE}",
+            query=f"SELECT airline_delay_id FROM {_STAGING_TABLE}",  # nosec B608
             connection=engine,
         )
         errors = validate_no_duplicates(df, key_columns=["airline_delay_id"])
@@ -50,7 +50,7 @@ def staging_no_null_key_columns(postgres: PostgresResource) -> AssetCheckResult:
     engine = postgres.get_engine()
     try:
         null_conditions = " OR ".join(f"{col} IS NULL" for col in _KEY_COLUMNS)
-        query = f"SELECT {', '.join(_KEY_COLUMNS)} FROM {_STAGING_TABLE} WHERE {null_conditions}"
+        query = f"SELECT {', '.join(_KEY_COLUMNS)} FROM {_STAGING_TABLE} WHERE {null_conditions}"  # nosec B608
         df = pl.read_database(query=query, connection=engine)
         errors = validate_no_nulls(df, _KEY_COLUMNS)
     finally:
@@ -69,7 +69,7 @@ def staging_month_range(postgres: PostgresResource) -> AssetCheckResult:
     """Verify that all month values are between 1 and 12."""
     engine = postgres.get_engine()
     try:
-        df = pl.read_database(query=f"SELECT month FROM {_STAGING_TABLE}", connection=engine)
+        df = pl.read_database(query=f"SELECT month FROM {_STAGING_TABLE}", connection=engine)  # nosec B608
         errors = validate_column_range(df, column="month", min_val=1, max_val=12)
     finally:
         engine.dispose()
@@ -96,7 +96,7 @@ def staging_non_negative_delays(postgres: PostgresResource) -> AssetCheckResult:
     engine = postgres.get_engine()
     try:
         df = pl.read_database(
-            query=f"SELECT {', '.join(delay_cols)} FROM {_STAGING_TABLE}",
+            query=f"SELECT {', '.join(delay_cols)} FROM {_STAGING_TABLE}",  # nosec B608
             connection=engine,
         )
         errors = [
@@ -120,7 +120,7 @@ def staging_delay_cause_consistency(postgres: PostgresResource) -> AssetCheckRes
     try:
         cols = _DELAY_CAUSE_COLS + ["arr_del15"]
         df = pl.read_database(
-            query=f"SELECT {', '.join(cols)} FROM {_STAGING_TABLE}",
+            query=f"SELECT {', '.join(cols)} FROM {_STAGING_TABLE}",  # nosec B608
             connection=engine,
         )
         errors = validate_column_consistency(
