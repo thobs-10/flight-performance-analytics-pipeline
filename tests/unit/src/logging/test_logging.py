@@ -112,8 +112,13 @@ def test_log_file_is_inside_log_dir() -> None:
 
 
 @pytest.mark.unit
-def test_log_level_default() -> None:
+def test_log_level_default(monkeypatch: pytest.MonkeyPatch) -> None:
     """LOG_LEVEL must default to INFO when the env var is not set."""
+    monkeypatch.delenv("LOG_LEVEL", raising=False)
+    monkeypatch.setattr(
+        "flight_performance_analytics_pipeline.logging.logging.load_dotenv", lambda **kw: None
+    )
+    importlib.reload(log_module)
     assert log_module.LOG_LEVEL == "INFO"
 
 
@@ -124,8 +129,13 @@ def test_log_rotation_default() -> None:
 
 
 @pytest.mark.unit
-def test_log_retention_default() -> None:
+def test_log_retention_default(monkeypatch: pytest.MonkeyPatch) -> None:
     """LOG_RETENTION must default to '30 days'."""
+    monkeypatch.delenv("LOG_RETENTION", raising=False)
+    monkeypatch.setattr(
+        "flight_performance_analytics_pipeline.logging.logging.load_dotenv", lambda **kw: None
+    )
+    importlib.reload(log_module)
     assert log_module.LOG_RETENTION == "30 days"
 
 
