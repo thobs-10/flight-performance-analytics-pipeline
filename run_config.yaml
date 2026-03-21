@@ -1,0 +1,4 @@
+ops:
+  read_raw_airline_delay_csv:
+    config:
+      csv_path: "data/ot_delaycause1_DL/Airline_Delay_Cause_Full.csv"
