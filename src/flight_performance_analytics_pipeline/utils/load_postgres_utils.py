@@ -11,28 +11,26 @@ from flight_performance_analytics_pipeline.utils.sql_loader import load_sql
 
 def get_csv_file_path(csv_path: str) -> str:
     """
-    Resolve a CSV path string to an absolute path within the project root.
+    Resolve a CSV path string to an absolute path.
 
-    The project root is assumed to be three levels above this file
-    (i.e. ``Path(__file__).parents[3]``). Relative paths are resolved
-    against this base directory. Absolute and relative paths that
-    resolve outside the base directory are rejected.
+    Absolute paths are returned unchanged. Relative paths are resolved against the
+    project root (three levels above this file). Relative paths that would resolve
+    outside the project root are rejected to prevent directory traversal.
 
     :param csv_path: CSV file path, absolute or relative to the project root.
     :return: Absolute path to the CSV file as a string.
-    :raises ValueError: If the resolved path is outside the allowed base directory.
+    :raises ValueError: If a relative path resolves outside the project root.
     """
-    base_dir = Path(__file__).parents[3].resolve()
     path = Path(csv_path)
 
     if path.is_absolute():
-        resolved_path = path.resolve()
-    else:
-        # utils/ is 3 levels deep inside src/<package>/utils/
-        resolved_path = (base_dir / path).resolve()
+        return str(path)
 
-    # Ensure the resolved path is within the allowed base directory to
-    # prevent path traversal and unintended file access.
+    base_dir = Path(__file__).parents[3].resolve()
+    # utils/ is 3 levels deep inside src/<package>/utils/
+    resolved_path = (base_dir / path).resolve()
+
+    # Prevent directory traversal: reject relative paths that escape the project root.
     if not resolved_path.is_relative_to(base_dir):
         raise ValueError(
             f"CSV path '{csv_path}' resolves outside the allowed base directory "

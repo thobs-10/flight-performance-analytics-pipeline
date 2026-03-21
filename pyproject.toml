@@ -84,7 +84,7 @@ directory_type = "project"
 root_module = "flight_performance_analytics_pipeline" # this is required
 
 # Defaults to `<root_module>.defs`.
-defs_module = "flight_performance_analytics_pipeline.defs"
+defs_module = "flight_performance_analytics_pipeline.definitions"
 
 
 # Defaults to `<root_module>.definitions`.
