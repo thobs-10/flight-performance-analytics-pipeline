@@ -10,14 +10,36 @@ from flight_performance_analytics_pipeline.utils.sql_loader import load_sql
 
 
 def get_csv_file_path(csv_path: str) -> str:
-    """Resolve a CSV path string to an absolute path."""
+    """
+    Resolve a CSV path string to an absolute path within the project root.
+
+    The project root is assumed to be three levels above this file
+    (i.e. ``Path(__file__).parents[3]``). Relative paths are resolved
+    against this base directory. Absolute and relative paths that
+    resolve outside the base directory are rejected.
+
+    :param csv_path: CSV file path, absolute or relative to the project root.
+    :return: Absolute path to the CSV file as a string.
+    :raises ValueError: If the resolved path is outside the allowed base directory.
+    """
+    base_dir = Path(__file__).parents[3].resolve()
     path = Path(csv_path)
-    if not path.is_absolute():
+
+    if path.is_absolute():
+        resolved_path = path.resolve()
+    else:
         # utils/ is 3 levels deep inside src/<package>/utils/
-        path = Path(__file__).parents[3] / path
-    return str(path)
+        resolved_path = (base_dir / path).resolve()
 
+    # Ensure the resolved path is within the allowed base directory to
+    # prevent path traversal and unintended file access.
+    if not resolved_path.is_relative_to(base_dir):
+        raise ValueError(
+            f"CSV path '{csv_path}' resolves outside the allowed base directory "
+            f"'{base_dir}'."
+        )
 
+    return str(resolved_path)
 def add_ingested_column(df: pl.DataFrame) -> pl.DataFrame:
     """Add a UTC ingestion timestamp column to the DataFrame."""
     return df.with_columns(
