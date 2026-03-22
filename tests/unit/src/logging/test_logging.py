@@ -123,8 +123,13 @@ def test_log_level_default(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 @pytest.mark.unit
-def test_log_rotation_default() -> None:
+def test_log_rotation_default(monkeypatch: pytest.MonkeyPatch) -> None:
     """LOG_ROTATION must default to '10 MB'."""
+    monkeypatch.delenv("LOG_ROTATION", raising=False)
+    monkeypatch.setattr(
+        "flight_performance_analytics_pipeline.logging.logging.load_dotenv", lambda **kw: None
+    )
+    importlib.reload(log_module)
     assert log_module.LOG_ROTATION == "10 MB"
 
 

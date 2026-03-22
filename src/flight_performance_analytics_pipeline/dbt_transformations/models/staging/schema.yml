@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: stg_airline_delay_data
+    description: >
+      Cleaned and deduplicated airline delay data. One row per unique
+      carrier-airport-month combination, identified by a surrogate key.
+    columns:
+      - name: airline_delay_id
+        description: MD5 surrogate key derived from year, month, carrier, and airport.
+        tests:
+          - unique
+          - not_null
+      - name: year
+        description: Reporting year.
+        tests:
+          - not_null
+      - name: month
+        description: Reporting month (1–12).
+        tests:
+          - not_null
+      - name: carrier
+        description: Normalised (uppercased, trimmed) IATA carrier code.
+        tests:
+          - not_null
+      - name: carrier_name
+        description: Full carrier name.
+      - name: airport
+        description: Normalised (uppercased, trimmed) IATA airport code.
+        tests:
+          - not_null
+      - name: airport_name
+        description: Full airport name.
+      - name: arr_flights
+        description: Total arriving flights (integer).
+      - name: arr_del15
+        description: Flights delayed 15 minutes or more (integer).
+      - name: carrier_ct
+        description: Carrier-caused delay count, weighted (numeric).
+      - name: weather_ct
+        description: Weather-caused delay count, weighted (numeric).
+      - name: nas_ct
+        description: NAS-caused delay count, weighted (numeric).
+      - name: security_ct
+        description: Security-caused delay count, weighted (numeric).
+      - name: late_aircraft_ct
+        description: Late-aircraft-caused delay count, weighted (numeric).
+      - name: arr_cancelled
+        description: Number of cancelled flights (integer).
+      - name: arr_diverted
+        description: Number of diverted flights (integer).
+      - name: arr_delay
+        description: Total arrival delay minutes (numeric).
+      - name: carrier_delay
+        description: Carrier-caused delay minutes (numeric).
+      - name: weather_delay
+        description: Weather-caused delay minutes (numeric).
+      - name: nas_delay
+        description: NAS-caused delay minutes (numeric).
+      - name: security_delay
+        description: Security-caused delay minutes (numeric).
+      - name: late_aircraft_delay
+        description: Late-aircraft-caused delay minutes (numeric).
+      - name: _ingested_at
+        description: UTC ingestion timestamp carried over from the bronze layer.
