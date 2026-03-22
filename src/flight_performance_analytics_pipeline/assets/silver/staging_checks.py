@@ -7,9 +7,6 @@ directly. Validation logic is delegated to pure functions in data_validators.py.
 import polars as pl
 from dagster import AssetCheckResult, AssetCheckSeverity, asset_check
 
-from flight_performance_analytics_pipeline.assets.silver.dbt_staging_assets import (
-    dbt_staging_airline_delay_assets,
-)
 from flight_performance_analytics_pipeline.resources.postgres_resource import PostgresResource
 from flight_performance_analytics_pipeline.utils.data_validators import (
     validate_column_range,
@@ -19,9 +16,10 @@ from flight_performance_analytics_pipeline.utils.data_validators import (
 
 _KEY_COLUMNS = ["year", "month", "carrier", "airport", "airline_delay_id"]
 _STAGING_TABLE = "staging.stg_airline_delay_data"
+_STAGING_ASSET_KEY = "stg_airline_delay_data"
 
 
-@asset_check(asset=dbt_staging_airline_delay_assets, name="unique_surrogate_key")
+@asset_check(asset=_STAGING_ASSET_KEY, name="unique_surrogate_key")
 def staging_unique_surrogate_key(postgres: PostgresResource) -> AssetCheckResult:
     """Verify that airline_delay_id is unique across all staging rows."""
     engine = postgres.get_engine()
@@ -42,7 +40,7 @@ def staging_unique_surrogate_key(postgres: PostgresResource) -> AssetCheckResult
     )
 
 
-@asset_check(asset=dbt_staging_airline_delay_assets, name="no_null_key_columns")
+@asset_check(asset=_STAGING_ASSET_KEY, name="no_null_key_columns")
 def staging_no_null_key_columns(postgres: PostgresResource) -> AssetCheckResult:
     """Verify that none of the key columns contain nulls in the staging table."""
     engine = postgres.get_engine()
@@ -62,7 +60,7 @@ def staging_no_null_key_columns(postgres: PostgresResource) -> AssetCheckResult:
     )
 
 
-@asset_check(asset=dbt_staging_airline_delay_assets, name="month_range")
+@asset_check(asset=_STAGING_ASSET_KEY, name="month_range")
 def staging_month_range(postgres: PostgresResource) -> AssetCheckResult:
     """Verify that all month values are between 1 and 12."""
     engine = postgres.get_engine()
@@ -80,7 +78,7 @@ def staging_month_range(postgres: PostgresResource) -> AssetCheckResult:
     )
 
 
-@asset_check(asset=dbt_staging_airline_delay_assets, name="non_negative_delays")
+@asset_check(asset=_STAGING_ASSET_KEY, name="non_negative_delays")
 def staging_non_negative_delays(postgres: PostgresResource) -> AssetCheckResult:
     """Verify that all delay minute columns are non-negative."""
     delay_cols = [

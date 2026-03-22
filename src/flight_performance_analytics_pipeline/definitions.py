@@ -11,8 +11,10 @@ from flight_performance_analytics_pipeline.assets.bronze import (
     read_raw_airline_delay_csv,
     write_to_bronze_airline_delay_data,
 )
-from flight_performance_analytics_pipeline.assets.silver import (
+from flight_performance_analytics_pipeline.assets.silver.dbt_staging_assets import (
     dbt_staging_airline_delay_assets,
+)
+from flight_performance_analytics_pipeline.assets.silver.staging_checks import (
     staging_month_range,
     staging_no_null_key_columns,
     staging_non_negative_delays,
