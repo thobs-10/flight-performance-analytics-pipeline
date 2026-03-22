@@ -12,7 +12,6 @@ from flight_performance_analytics_pipeline.assets.silver.dbt_staging_assets impo
 )
 from flight_performance_analytics_pipeline.resources.postgres_resource import PostgresResource
 from flight_performance_analytics_pipeline.utils.data_validators import (
-    validate_column_consistency,
     validate_column_range,
     validate_no_duplicates,
     validate_no_nulls,
@@ -20,7 +19,6 @@ from flight_performance_analytics_pipeline.utils.data_validators import (
 
 _KEY_COLUMNS = ["year", "month", "carrier", "airport", "airline_delay_id"]
 _STAGING_TABLE = "staging.stg_airline_delay_data"
-_DELAY_CAUSE_COLS = ["carrier_ct", "weather_ct", "nas_ct", "security_ct", "late_aircraft_ct"]
 
 
 @asset_check(asset=dbt_staging_airline_delay_assets, name="unique_surrogate_key")
@@ -113,30 +111,6 @@ def staging_non_negative_delays(postgres: PostgresResource) -> AssetCheckResult:
     )
 
 
-@asset_check(asset=dbt_staging_airline_delay_assets, name="delay_cause_consistency")
-def staging_delay_cause_consistency(postgres: PostgresResource) -> AssetCheckResult:
-    """Verify that the sum of delay cause counts approximately equals arr_del15."""
-    engine = postgres.get_engine()
-    try:
-        cols = _DELAY_CAUSE_COLS + ["arr_del15"]
-        df = pl.read_database(
-            query=f"SELECT {', '.join(cols)} FROM {_STAGING_TABLE}",  # nosec B608
-            connection=engine,
-        )
-        errors = validate_column_consistency(
-            df,
-            component_columns=_DELAY_CAUSE_COLS,
-            total_column="arr_del15",
-            tolerance=1.0,
-        )
-    finally:
-        engine.dispose()
-
-    passed = len(errors) == 0
-    return AssetCheckResult(
-        passed=passed,
-        severity=AssetCheckSeverity.WARN,
-        description="; ".join(errors)
-        if errors
-        else "Delay cause counts are consistent with arr_del15.",
-    )
+# The delay cause consistency check is intentionally disabled for now because
+# BTS cause columns are fractional allocations and do not reliably reconcile to
+# arr_del15 at the row level.

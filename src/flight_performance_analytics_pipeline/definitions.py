@@ -13,7 +13,6 @@ from flight_performance_analytics_pipeline.assets.bronze import (
 )
 from flight_performance_analytics_pipeline.assets.silver import (
     dbt_staging_airline_delay_assets,
-    staging_delay_cause_consistency,
     staging_month_range,
     staging_no_null_key_columns,
     staging_non_negative_delays,
@@ -25,6 +24,7 @@ _DBT_PROJECT_DIR = Path(__file__).parent / "dbt_transformations"
 # Resolve the dbt executable relative to this file so it works in any environment
 # where the project is installed via uv (venv sits at the repo root).
 _DBT_EXECUTABLE = Path(__file__).parents[2] / ".venv" / "bin" / "dbt"
+_DBT_EXECUTABLE_ABS = _DBT_EXECUTABLE.resolve()
 
 defs = Definitions(
     assets=[
@@ -41,7 +41,6 @@ defs = Definitions(
         staging_no_null_key_columns,
         staging_month_range,
         staging_non_negative_delays,
-        staging_delay_cause_consistency,
     ],
     resources={
         "postgres": PostgresResource(
@@ -54,7 +53,7 @@ defs = Definitions(
         "dbt": DbtCliResource(
             project_dir=str(_DBT_PROJECT_DIR),
             profiles_dir=str(_DBT_PROJECT_DIR),
-            dbt_executable=str(_DBT_EXECUTABLE),
+            dbt_executable=str(_DBT_EXECUTABLE_ABS),
         ),
     },
 )

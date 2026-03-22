@@ -31,5 +31,5 @@ dbt_project.prepare_if_dev()
 def dbt_staging_airline_delay_assets(
     context: AssetExecutionContext, dbt: DbtCliResource
 ) -> Generator[Any, None, None]:
-    """Run dbt staging models that clean and type-cast the bronze airline delay data."""
-    yield from dbt.cli(["run", "--select", "staging"], context=context).stream()
+    """Build dbt staging models and execute their schema tests."""
+    yield from dbt.cli(["build", "--select", "staging"], context=context).stream()
