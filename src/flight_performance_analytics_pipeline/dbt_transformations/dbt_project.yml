@@ -15,5 +15,4 @@ clean-targets:
 models:
   flight_performance_analytics:
     staging:
-      +schema: staging
       +materialized: table
