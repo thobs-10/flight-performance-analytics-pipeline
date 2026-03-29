@@ -73,10 +73,23 @@ daily-run-test: ## Execute one monthly partition for the automated asset selecti
 		--partition $$month \
 		--config run_config.yaml
 
-backfill-run: ## Execute fact backfill across all configured monthly partitions
-	set -a; source .env; set +a; for m in 2024-01-01 2024-02-01 2024-03-01 2024-04-01 2024-05-01 2024-06-01 2024-07-01 2024-08-01 2024-09-01 2024-10-01 2024-11-01 2024-12-01 2025-01-01 2025-02-01 2025-03-01 2025-04-01 2025-05-01 2025-06-01 2025-07-01 2025-08-01 2025-09-01 2025-10-01 2025-11-01 2025-12-01; do \
-		echo "Backfill partition $$m"; \
-		uv run dagster asset materialize -m $(DAGSTER_MODULE) --select gold_fact_flight_delays --partition $$m || exit 1; \
+backfill-run: ## Execute fact backfill across all configured monthly partitions (START_MONTH=YYYY-MM-01 [, END_MONTH=YYYY-MM-01])
+	@start_month="$(START_MONTH)"; \
+	end_month="$(END_MONTH)"; \
+	if [ -z "$$start_month" ]; then \
+		echo "Usage: make backfill-run START_MONTH=YYYY-MM-01 [END_MONTH=YYYY-MM-01]"; \
+		exit 1; \
+	fi; \
+	if [ -z "$$end_month" ]; then \
+		end_month=$$(date -u +%Y-%m-01); \
+	fi; \
+	end_exclusive=$$(date -u -d "$$end_month + 1 month" +%Y-%m-01); \
+	current="$$start_month"; \
+	set -a; source .env; set +a; \
+	while [ "$$current" != "$$end_exclusive" ]; do \
+		echo "Backfill partition $$current"; \
+		uv run dagster asset materialize -m $(DAGSTER_MODULE) --select gold_fact_flight_delays --partition $$current || exit 1; \
+		current=$$(date -u -d "$$current + 1 month" +%Y-%m-01); \
 	done
 
 db-up: ## Start the PostgreSQL container
