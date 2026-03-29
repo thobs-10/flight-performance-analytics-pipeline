@@ -130,7 +130,7 @@ def gold_fact_no_orphaned_airport_keys(clickhouse: ClickhouseResource) -> AssetC
     )
 
 
-@asset_check(asset=_FACT_ASSET, name="no_orphaned_date_keys")
+@asset_check(asset=_DIM_DATE_ASSET, name="no_orphaned_date_keys")
 def gold_fact_no_orphaned_date_keys(clickhouse: ClickhouseResource) -> AssetCheckResult:
     """Verify all date_key values in the fact table exist in dim_date."""
     client = clickhouse.get_client()
