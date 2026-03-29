@@ -1,7 +1,21 @@
+{{
+    config(
+        materialized         = 'incremental',
+        unique_key           = 'airline_delay_id',
+        incremental_strategy = 'delete+insert',
+        on_schema_change     = 'fail'
+    )
+}}
+
 with
 
 source as (
     select * from {{ source('bronze', 'airline_delay_data') }}
+    {% if is_incremental() %}
+    -- On incremental runs, only process records ingested after the latest
+    -- timestamp already present in the staging table, avoiding full rescans.
+        where _ingested_at > (select max(_ingested_at) from {{ this }})
+    {% endif %}
 ),
 
 deduped as (
@@ -60,4 +74,5 @@ cleaned as (
     where _row_num = 1
 )
 
-select * from cleaned
+select *
+from cleaned

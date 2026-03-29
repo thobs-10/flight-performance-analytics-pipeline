@@ -210,6 +210,7 @@ data/
 COPILOT_INSTRUCTIONS.md
 *.txt
 *.json
+!**/dbt_transformations/target/manifest.json
 *.csv
 *.parquet
 *.log
@@ -217,3 +218,6 @@ COPILOT_INSTRUCTIONS.md
 *.tmp_dagster
 *.tmp_dagster_*
 .dagster_home/
+.user.yml
+dbt_transformations/target/*
+!dbt_transformations/target/manifest.json

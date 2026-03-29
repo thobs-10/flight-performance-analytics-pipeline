@@ -16,7 +16,7 @@ class BronzeIngestionConfig(Config):
     csv_path: str
 
 
-@asset
+@asset(group_name="bronze")
 def read_raw_airline_delay_csv(
     context: AssetExecutionContext,
     config: BronzeIngestionConfig,
@@ -28,7 +28,7 @@ def read_raw_airline_delay_csv(
     return df
 
 
-@asset
+@asset(group_name="bronze")
 def add_metadata_columns_to_airline_delay_data(
     context: AssetExecutionContext,
     read_raw_airline_delay_csv: pl.DataFrame,
@@ -39,7 +39,7 @@ def add_metadata_columns_to_airline_delay_data(
     return df
 
 
-@asset
+@asset(group_name="bronze")
 def write_to_bronze_airline_delay_data(
     context: AssetExecutionContext,
     add_metadata_columns_to_airline_delay_data: pl.DataFrame,

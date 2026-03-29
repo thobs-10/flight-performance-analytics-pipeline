@@ -76,13 +76,27 @@ repos:
     rev: 3.1.0
     hooks:
       - id: sqlfluff-lint
-        name: sqlfluff lint
-        args: [--dialect, postgres] # Change dialect as needed
+        name: sqlfluff lint (postgres)
+        args: [--dialect, postgres]
+        exclude: ^sql_scripts/clickhouse/
         files: \.(sql|ddl|dml)$
         types: [file]
 
       - id: sqlfluff-fix
-        name: sqlfluff fix
+        name: sqlfluff fix (postgres)
         args: [--dialect, postgres]
+        exclude: ^sql_scripts/clickhouse/
         files: \.(sql|ddl|dml)$
+        types: [file]
+
+      - id: sqlfluff-lint
+        name: sqlfluff lint (clickhouse)
+        args: [--dialect, clickhouse]
+        files: ^sql_scripts/clickhouse/.*\.(sql|ddl|dml)$
+        types: [file]
+
+      - id: sqlfluff-fix
+        name: sqlfluff fix (clickhouse)
+        args: [--dialect, clickhouse]
+        files: ^sql_scripts/clickhouse/.*\.(sql|ddl|dml)$
         types: [file]

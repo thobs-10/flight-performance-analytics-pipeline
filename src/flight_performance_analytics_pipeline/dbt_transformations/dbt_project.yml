@@ -16,3 +16,9 @@ models:
   flight_performance_analytics:
     staging:
       +materialized: table
+    marts:
+      +materialized: table
+      core:
+        +schema: marts
+      analytics:
+        +schema: analytics

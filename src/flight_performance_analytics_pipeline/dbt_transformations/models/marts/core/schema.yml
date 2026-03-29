@@ -1,0 +1,141 @@
+version: 2
+
+models:
+  - name: dim_carrier
+    description: >
+      Carrier dimension derived from staging data.
+      One row per unique airline carrier with an MD5 surrogate key.
+    columns:
+      - name: carrier_key
+        description: MD5 surrogate key derived from the carrier code.
+        tests:
+          - unique
+          - not_null
+      - name: carrier
+        description: IATA carrier code (e.g. DL, AA, UA).
+        tests:
+          - not_null
+      - name: carrier_name
+        description: Full airline carrier name.
+        tests:
+          - not_null
+
+  - name: dim_airport
+    description: >
+      Airport dimension derived from staging data.
+      One row per unique airport with an MD5 surrogate key.
+    columns:
+      - name: airport_key
+        description: MD5 surrogate key derived from the airport code.
+        tests:
+          - unique
+          - not_null
+      - name: airport
+        description: IATA airport code (e.g. ATL, ORD, LAX).
+        tests:
+          - not_null
+      - name: airport_name
+        description: Full airport name.
+        tests:
+          - not_null
+
+  - name: dim_date
+    description: >
+      Date dimension derived from the distinct year/month combinations present in
+      staging data, enriched with quarter, month name, and a compact year_month string.
+    columns:
+      - name: date_key
+        description: Integer surrogate key in YYYYMM format (e.g. 202301 for January 2023).
+        tests:
+          - unique
+          - not_null
+      - name: year
+        description: Calendar year.
+        tests:
+          - not_null
+      - name: month
+        description: Calendar month (1–12).
+        tests:
+          - not_null
+      - name: quarter
+        description: Calendar quarter (1–4).
+      - name: month_name
+        description: Full month name (e.g. January, February).
+      - name: year_month
+        description: Compact year-month string in YYYY-MM format (e.g. 2023-01).
+
+  - name: fact_flight_delays
+    description: >
+      Central fact table containing all flight delay metrics, joined to carrier,
+      airport, and date dimension keys.  One row per unique airline_delay_id.
+    columns:
+      - name: airline_delay_id
+        description: MD5 surrogate key from the staging layer (year, month, carrier, airport).
+        tests:
+          - unique
+          - not_null
+      - name: date_key
+        description: Foreign key to dim_date.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: carrier_key
+        description: Foreign key to dim_carrier.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_carrier')
+              field: carrier_key
+      - name: airport_key
+        description: Foreign key to dim_airport.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_airport')
+              field: airport_key
+      - name: year
+        description: Calendar year of the record.
+      - name: month
+        description: Calendar month of the record.
+      - name: carrier
+        description: IATA carrier code.
+      - name: carrier_name
+        description: Full airline carrier name.
+      - name: airport
+        description: IATA airport code.
+      - name: airport_name
+        description: Full airport name.
+      - name: arr_flights
+        description: Total number of arriving flights.
+      - name: arr_del15
+        description: Number of flights arriving 15 or more minutes late.
+      - name: arr_cancelled
+        description: Number of cancelled flights.
+      - name: arr_diverted
+        description: Number of diverted flights.
+      - name: carrier_ct
+        description: Weighted count of delays attributed to the carrier.
+      - name: weather_ct
+        description: Weighted count of delays attributed to weather.
+      - name: nas_ct
+        description: Weighted count of delays attributed to NAS (National Airspace System).
+      - name: security_ct
+        description: Weighted count of delays attributed to security.
+      - name: late_aircraft_ct
+        description: Weighted count of delays attributed to a late arriving aircraft.
+      - name: arr_delay
+        description: Total arrival delay minutes.
+      - name: carrier_delay
+        description: Delay minutes attributed to the carrier.
+      - name: weather_delay
+        description: Delay minutes attributed to weather.
+      - name: nas_delay
+        description: Delay minutes attributed to NAS.
+      - name: security_delay
+        description: Delay minutes attributed to security.
+      - name: late_aircraft_delay
+        description: Delay minutes attributed to late arriving aircraft.
+      - name: _ingested_at
+        description: Timestamp when the source row was ingested into the bronze layer.

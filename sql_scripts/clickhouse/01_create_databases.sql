@@ -1,0 +1,21 @@
+-- ================================================================
+-- 01_create_databases.sql
+-- ================================================================
+-- 01_create_databases.sql
+-- ================================================================
+-- Purpose : Bootstrap the ClickHouse database(s) for the gold
+-- analytical layer.
+--
+-- Run this script once when provisioning a new ClickHouse instance,
+-- or during
+-- infrastructure bring-up (e.g. in docker-compose init or Terraform
+-- null_resource).
+--
+-- Database : gold
+--   Holds all production analytical tables: dim_carrier, dim_airport,
+--   dim_date,
+--   fact_flight_delays, and the aggregating materialized views.
+-- ==================================================================
+
+-- Create the gold analytical database for flight performance analytics.
+CREATE DATABASE IF NOT EXISTS gold;

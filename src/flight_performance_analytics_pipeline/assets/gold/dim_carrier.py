@@ -1,4 +1,4 @@
-"""Gold asset: dim_date — Postgres marts → ClickHouse gold."""
+"""Gold asset: dim_carrier — Postgres marts → ClickHouse gold."""
 
 import polars as pl
 from dagster import AssetExecutionContext, asset
@@ -6,25 +6,24 @@ from dagster import AssetExecutionContext, asset
 from flight_performance_analytics_pipeline.resources.clickhouse_io_manager import ClickhouseResource
 from flight_performance_analytics_pipeline.resources.postgres_resource import PostgresResource
 
-_MART_TABLE = "marts.dim_date"
-_GOLD_TABLE = "gold.dim_date"
-_COLUMNS = "date_key, year, month, quarter, month_name, year_month"
+_MART_TABLE = "marts.dim_carrier"
+_GOLD_TABLE = "gold.dim_carrier"
 
 
 @asset(
-    deps=["dim_date"],
+    deps=["dim_carrier"],
     group_name="gold",
 )
-def gold_dim_date(
+def gold_dim_carrier(
     context: AssetExecutionContext,
     postgres: PostgresResource,
     clickhouse: ClickhouseResource,
 ) -> None:
-    """Load dim_date from the Postgres marts layer into ClickHouse gold."""
+    """Load dim_carrier from the Postgres marts layer into ClickHouse gold."""
     engine = postgres.get_engine()
     try:
         df = pl.read_database(
-            query=f"SELECT {_COLUMNS} FROM {_MART_TABLE}",  # nosec B608
+            query=f"SELECT carrier_key, carrier, carrier_name FROM {_MART_TABLE}",  # nosec B608
             connection=engine,
         )
     finally:

@@ -1,0 +1,78 @@
+version: 2
+
+models:
+  - name: carrier_delay_performance
+    description: >
+      Aggregated carrier-level delay performance metrics across all years and months.
+      One row per carrier showing total volumes, delay rates, and delay minutes
+      broken down by cause.
+    columns:
+      - name: carrier_key
+        description: MD5 surrogate key for the carrier (from dim_carrier).
+        tests:
+          - unique
+          - not_null
+      - name: carrier
+        description: IATA carrier code.
+      - name: carrier_name
+        description: Full airline carrier name.
+      - name: total_flights
+        description: Total number of arriving flights.
+      - name: total_delayed
+        description: Total number of flights arriving 15 or more minutes late.
+      - name: total_cancelled
+        description: Total number of cancelled flights.
+      - name: delay_rate_pct
+        description: Percentage of flights that were delayed (arr_del15 / arr_flights * 100).
+      - name: total_delay_minutes
+        description: Total arrival delay minutes across all delayed flights.
+      - name: total_carrier_delay_minutes
+        description: Total delay minutes attributed to the carrier.
+      - name: total_weather_delay_minutes
+        description: Total delay minutes attributed to weather.
+      - name: total_nas_delay_minutes
+        description: Total delay minutes attributed to NAS.
+      - name: total_security_delay_minutes
+        description: Total delay minutes attributed to security.
+      - name: total_late_aircraft_delay_minutes
+        description: Total delay minutes attributed to late arriving aircraft.
+      - name: avg_delay_minutes_per_delayed_flight
+        description: Average delay minutes per delayed flight (arr_delay / arr_del15).
+
+  - name: monthly_delay_trends
+    description: >
+      Monthly rollup of flight delay metrics across all carriers and airports.
+      One row per year/month showing aggregate volumes, delay rates, and
+      per-cause delay minute totals for trend analysis.
+    columns:
+      - name: date_key
+        description: Integer surrogate key in YYYYMM format (from dim_date).
+        tests:
+          - unique
+          - not_null
+      - name: year
+        description: Calendar year.
+      - name: month
+        description: Calendar month (1–12).
+      - name: total_flights
+        description: Total number of arriving flights in the period.
+      - name: total_delayed
+        description: Total number of flights delayed 15 or more minutes.
+      - name: total_cancelled
+        description: Total number of cancelled flights.
+      - name: total_diverted
+        description: Total number of diverted flights.
+      - name: delay_rate_pct
+        description: Percentage of flights delayed (arr_del15 / arr_flights * 100).
+      - name: total_delay_minutes
+        description: Total arrival delay minutes.
+      - name: avg_delay_minutes_per_flight
+        description: Average delay minutes per arriving flight (arr_delay / arr_flights).
+      - name: total_carrier_delay_minutes
+        description: Total delay minutes attributed to the carrier.
+      - name: total_weather_delay_minutes
+        description: Total delay minutes attributed to weather.
+      - name: total_nas_delay_minutes
+        description: Total delay minutes attributed to NAS.
+      - name: total_late_aircraft_delay_minutes
+        description: Total delay minutes attributed to late arriving aircraft.

@@ -7,10 +7,10 @@ ingestion assets.
 
 from collections.abc import Generator
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 from dagster import AssetExecutionContext
-from dagster_dbt import DbtCliResource, DbtProject, dbt_assets
+from dagster_dbt import DagsterDbtTranslator, DbtCliResource, DbtProject, dbt_assets
 
 DBT_PROJECT_DIR = Path(__file__).parents[2] / "dbt_transformations"
 
@@ -24,9 +24,18 @@ dbt_project = DbtProject(
 dbt_project.prepare_if_dev()
 
 
+class _SilverDbtTranslator(DagsterDbtTranslator):
+    """Assigns all staging dbt models to the 'silver' asset group."""
+
+    def get_group_name(self, dbt_resource_props: Dict[str, Any]) -> str:
+        """Return the Dagster group name for a dbt resource."""
+        return "silver"
+
+
 @dbt_assets(
     manifest=dbt_project.manifest_path,
     select="staging",
+    dagster_dbt_translator=_SilverDbtTranslator(),
 )
 def dbt_staging_airline_delay_assets(
     context: AssetExecutionContext, dbt: DbtCliResource

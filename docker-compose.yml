@@ -20,11 +20,14 @@ services:
     image: clickhouse/clickhouse-server:24-alpine
     environment:
       CLICKHOUSE_USER: default
-      CLICKHOUSE_PASSWORD: ""
-      CLICKHOUSE_DB: flight_performance_dwh
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-clickhouse}
+      CLICKHOUSE_DB: gold
     ports:
       - "8123:8123" # HTTP interface
       - "9000:9000" # Native TCP interface
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./sql_scripts/clickhouse:/docker-entrypoint-initdb.d/
     healthcheck:
       test: ["CMD-SHELL", "clickhouse-client --query 'SELECT 1'"]
       interval: 5s
@@ -33,3 +36,4 @@ services:
 
 volumes:
   postgres_data:
+  clickhouse_data:
