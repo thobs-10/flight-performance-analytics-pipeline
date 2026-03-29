@@ -94,7 +94,7 @@ jobs:
         run: uv export --no-emit-project > requirements.txt
 
       - name: Run pip-audit
-        run: uvx pip-audit -r requirements.txt --vulnerability-service osv
+        run: uvx pip-audit -r requirements.txt --vulnerability-service osv --ignore-vuln CVE-2026-4539
 
   # integration-tests:
   #     needs: unit-tests

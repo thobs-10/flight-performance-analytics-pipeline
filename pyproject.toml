@@ -37,6 +37,9 @@ dependencies = [
 [tool.uv.build-backend]
 module-name = "flight_performance_analytics_pipeline"
 
+[tool.uv]
+constraint-dependencies = ["cryptography>=46.0.6", "requests>=2.33.0"]
+
 [tool.setuptools_scm]
 write_to = "_version.py"
 version_scheme = "release-branch-semver"
