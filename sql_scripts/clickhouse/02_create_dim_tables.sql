@@ -49,11 +49,11 @@ ORDER BY airport_key;
 CREATE TABLE IF NOT EXISTS gold.dim_date
 (
     date_key Uint32,
-    `year` Uint16,
-    `month` Uint8,
-    `quarter` Uint8,
+    year Uint16,
+    month Uint8,
+    quarter Uint8,
     month_name String,
-    `year_month` String,
+    year_month String,
     _updated_at Datetime DEFAULT now()
 )
 ENGINE = replacingmergetree(_updated_at)

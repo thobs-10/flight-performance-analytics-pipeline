@@ -20,13 +20,13 @@
 
 -- Secondary indexes on fact_flight_delays for common analytical access patterns.
 ALTER TABLE gold.fact_flight_delays
-    ADD INDEX IF NOT EXISTS idx_carrier carrier TYPE bloom_filter GRANULARITY 1;
+    ADD INDEX IF NOT EXISTS idx_carrier carrier TYPE bloom_filter GRANULARITY 1; -- noqa: PRS
 
 ALTER TABLE gold.fact_flight_delays
-    ADD INDEX IF NOT EXISTS idx_airport airport TYPE bloom_filter GRANULARITY 1;
+    ADD INDEX IF NOT EXISTS idx_airport airport TYPE bloom_filter GRANULARITY 1; -- noqa: PRS
 
 ALTER TABLE gold.fact_flight_delays
-    ADD INDEX IF NOT EXISTS idx_month month TYPE minmax GRANULARITY 1;
+    ADD INDEX IF NOT EXISTS idx_month month TYPE minmax GRANULARITY 1; -- noqa: PRS
 
 
 -- Aggregating materialized view: carrier-level delay performance.
