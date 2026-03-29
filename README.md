@@ -321,6 +321,6 @@ All checks are run automatically as part of `make silver-run`, `make gold`, `mak
 ---
 
 ## Pictures
-![alt text](<Pasted Graphic.png>)
-![alt text](<Pasted Graphic 2.png>)
-![alt text](<Pasted Graphic 3.png>)
+![alt text](image-1.png)
+![alt text](image.png)
+![alt text](image-2.png)
