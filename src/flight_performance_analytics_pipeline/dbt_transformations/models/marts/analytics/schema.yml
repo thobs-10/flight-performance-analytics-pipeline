@@ -9,7 +9,7 @@ models:
     columns:
       - name: carrier_key
         description: MD5 surrogate key for the carrier (from dim_carrier).
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: carrier
@@ -47,7 +47,7 @@ models:
     columns:
       - name: date_key
         description: Integer surrogate key in YYYYMM format (from dim_date).
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: year

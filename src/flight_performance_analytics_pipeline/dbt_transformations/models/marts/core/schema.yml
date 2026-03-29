@@ -8,16 +8,16 @@ models:
     columns:
       - name: carrier_key
         description: MD5 surrogate key derived from the carrier code.
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: carrier
         description: IATA carrier code (e.g. DL, AA, UA).
-        data_tests:
+        tests:
           - not_null
       - name: carrier_name
         description: Full airline carrier name.
-        data_tests:
+        tests:
           - not_null
 
   - name: dim_airport
@@ -27,16 +27,16 @@ models:
     columns:
       - name: airport_key
         description: MD5 surrogate key derived from the airport code.
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: airport
         description: IATA airport code (e.g. ATL, ORD, LAX).
-        data_tests:
+        tests:
           - not_null
       - name: airport_name
         description: Full airport name.
-        data_tests:
+        tests:
           - not_null
 
   - name: dim_date
@@ -46,16 +46,16 @@ models:
     columns:
       - name: date_key
         description: Integer surrogate key in YYYYMM format (e.g. 202301 for January 2023).
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: year
         description: Calendar year.
-        data_tests:
+        tests:
           - not_null
       - name: month
         description: Calendar month (1–12).
-        data_tests:
+        tests:
           - not_null
       - name: quarter
         description: Calendar quarter (1–4).
@@ -71,26 +71,26 @@ models:
     columns:
       - name: airline_delay_id
         description: MD5 surrogate key from the staging layer (year, month, carrier, airport).
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: date_key
         description: Foreign key to dim_date.
-        data_tests:
+        tests:
           - not_null
           - relationships:
               to: ref('dim_date')
               field: date_key
       - name: carrier_key
         description: Foreign key to dim_carrier.
-        data_tests:
+        tests:
           - not_null
           - relationships:
               to: ref('dim_carrier')
               field: carrier_key
       - name: airport_key
         description: Foreign key to dim_airport.
-        data_tests:
+        tests:
           - not_null
           - relationships:
               to: ref('dim_airport')
