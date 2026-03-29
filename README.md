@@ -320,9 +320,7 @@ All checks are run automatically as part of `make silver-run`, `make gold`, `mak
 
 ---
 
-## Next Steps
-
-- Explore the Dagster UI at http://localhost:3000 after running `make dev`
-- Review dbt models in `src/flight_performance_analytics_pipeline/dbt_transformations/models/`
-- Examine ClickHouse table schemas in `sql_scripts/clickhouse/`
-- Check asset relationships and data lineage in the Dagster UI
+## Pictures
+![alt text](<Pasted Graphic.png>)
+![alt text](<Pasted Graphic 2.png>)
+![alt text](<Pasted Graphic 3.png>)
