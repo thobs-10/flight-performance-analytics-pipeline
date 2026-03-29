@@ -217,3 +217,4 @@ COPILOT_INSTRUCTIONS.md
 *.tmp_dagster
 *.tmp_dagster_*
 .dagster_home/
+.user.yml
