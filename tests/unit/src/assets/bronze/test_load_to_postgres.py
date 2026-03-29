@@ -103,6 +103,8 @@ def test_get_csv_file_path_relative_points_to_existing_file(tmp_path: Path) -> N
     result = get_csv_file_path(str(csv_path))
     assert result == str(csv_path)
     assert Path(result).exists(), f"Expected temporary CSV to exist at: {result}"
+
+
 # ---------------------------------------------------------------------------
 # add_ingested_column
 # ---------------------------------------------------------------------------
@@ -220,9 +222,9 @@ def test_write_to_database_logs_row_count(sample_df: pl.DataFrame) -> None:
 @pytest.mark.unit
 def test_read_raw_airline_delay_csv_returns_dataframe(airline_delay_csv: Path) -> None:
     """read_raw_airline_delay_csv should return a non-empty Polars DataFrame."""
-    context = build_asset_context()
     config = BronzeIngestionConfig(csv_path=str(airline_delay_csv))
-    result = read_raw_airline_delay_csv(context=context, config=config)
+    with build_asset_context() as context:
+        result = read_raw_airline_delay_csv(context=context, config=config)
     assert isinstance(result, pl.DataFrame)
     assert len(result) > 0
 
@@ -253,19 +255,19 @@ def test_read_raw_airline_delay_csv_has_expected_columns(airline_delay_csv: Path
         "security_delay",
         "late_aircraft_delay",
     }
-    context = build_asset_context()
     config = BronzeIngestionConfig(csv_path=str(airline_delay_csv))
-    result = read_raw_airline_delay_csv(context=context, config=config)
+    with build_asset_context() as context:
+        result = read_raw_airline_delay_csv(context=context, config=config)
     assert expected_columns.issubset(set(result.columns))
 
 
 @pytest.mark.unit
 def test_add_metadata_columns_asset_adds_ingested_at(sample_df: pl.DataFrame) -> None:
     """add_metadata_columns_to_airline_delay_data asset should add _ingested_at."""
-    context = build_asset_context()
-    result = add_metadata_columns_to_airline_delay_data(
-        context=context,
-        read_raw_airline_delay_csv=sample_df,
-    )
+    with build_asset_context() as context:
+        result = add_metadata_columns_to_airline_delay_data(
+            context=context,
+            read_raw_airline_delay_csv=sample_df,
+        )
     assert "_ingested_at" in result.columns
     assert len(result) == len(sample_df)
